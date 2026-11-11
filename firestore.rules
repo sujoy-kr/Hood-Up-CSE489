@@ -21,7 +21,7 @@ service cloud.firestore {
     }
     match /users/{uid} {
       allow read: if owner(uid) || admin();
-      // No invite or APK-supplied field can bootstrap an admin. Trusted console/Admin SDK only.
+      // No APK-supplied field can bootstrap an admin. Trusted console/Admin SDK only.
       allow create: if owner(uid) && profile(request.resource.data,uid)
         && request.resource.data.role == 'customer'
         && request.resource.data.get('plus',false) == false && request.resource.data.get('plusUntil',0) == 0;

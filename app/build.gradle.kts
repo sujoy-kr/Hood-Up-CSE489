@@ -35,7 +35,6 @@ android {
         minSdk = 24
         targetSdk = 37
         buildConfigField("String", "GEMINI_API_KEY", buildConfigString(envValues["GEMINI_API_KEY"].orEmpty()))
-        buildConfigField("String", "ADMIN_INVITE_CODE", buildConfigString(envValues["ADMIN_INVITE_CODE"].orEmpty()))
         versionCode = 1
         versionName = "1.0"
 
