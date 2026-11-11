@@ -1,0 +1,27 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/main" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:orientation="vertical" android:background="@color/bg">
+    <LinearLayout style="@style/TopBar">
+        <ImageButton android:id="@+id/back" style="@style/IconButton" android:src="@drawable/ic_back"
+            android:contentDescription="@string/back" />
+        <TextView android:id="@+id/admin_title" style="@style/BarTitle" />
+        <Button android:id="@+id/refresh" style="@style/SmallButton" android:text="@string/refresh" />
+        <Button android:id="@+id/admin_action" style="@style/SmallDangerButton"
+            android:layout_marginStart="@dimen/spacing_half" android:visibility="gone" />
+    </LinearLayout>
+    <FrameLayout android:id="@+id/admin_frame" android:layout_width="match_parent"
+        android:layout_height="0dp" android:layout_weight="1" android:paddingStart="@dimen/spacing"
+        android:paddingEnd="@dimen/spacing">
+        <ScrollView android:id="@+id/admin_scroll" android:layout_width="match_parent"
+            android:layout_height="match_parent" android:fillViewport="true" android:scrollbars="none">
+            <LinearLayout android:id="@+id/admin_content" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical"
+                android:paddingTop="@dimen/spacing_half" android:paddingBottom="@dimen/spacing"
+                android:focusableInTouchMode="true" android:defaultFocusHighlightEnabled="false">
+                <ProgressBar android:id="@+id/admin_gate_progress" style="@style/Loader"
+                    android:contentDescription="@string/auth_loading" />
+                <TextView android:id="@+id/form_error" style="@style/InlineError" android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing" android:visibility="gone" />
+                <LinearLayout android:id="@+id/admin_body" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" />
+            </LinearLayout>
+        </ScrollView>
+    </FrameLayout>
+</LinearLayout>

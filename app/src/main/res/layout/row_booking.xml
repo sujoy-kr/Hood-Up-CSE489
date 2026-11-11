@@ -1,0 +1,31 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingBottom="12dp">
+    <LinearLayout style="@style/Card" android:layout_marginBottom="0dp"
+        android:foreground="@drawable/fg_card_ripple">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="top">
+            <TextView android:id="@+id/booking_service" style="@style/SectionHeader"
+                android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" />
+            <TextView android:id="@+id/booking_status" style="@style/StatusPill" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_half" />
+        </LinearLayout>
+        <TextView android:id="@+id/booking_workshop" style="@style/MutedText" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="2dp" />
+        <View style="@style/Divider" android:layout_marginTop="12dp" android:layout_marginBottom="12dp" />
+        <TextView android:id="@+id/booking_time" style="@style/TextBody" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:textSize="@dimen/text_small" android:drawableStart="@drawable/ic_clock_small"
+            android:drawablePadding="@dimen/spacing_half" android:drawableTint="@color/accent"
+            android:gravity="center_vertical" />
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical"
+            android:layout_marginTop="@dimen/spacing_half">
+            <TextView android:id="@+id/booking_car" style="@style/MutedText" android:layout_width="0dp"
+                android:layout_height="wrap_content" android:layout_weight="1"
+                android:drawableStart="@drawable/ic_car_small" android:drawablePadding="@dimen/spacing_half"
+                android:drawableTint="@color/text_muted" android:gravity="center_vertical" />
+            <TextView android:id="@+id/booking_price" style="@style/TextBody" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_half" android:textColor="@color/primary"
+                android:textStyle="bold" />
+        </LinearLayout>
+        <TextView android:id="@+id/waiting_sync" style="@style/Caption" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_half" android:text="@string/waiting_sync"
+            android:textColor="@color/warning" android:textStyle="bold" />
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,74 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/main" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:background="@color/bg" android:fillViewport="true">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="vertical" android:padding="@dimen/spacing_large"
+        android:focusableInTouchMode="true" android:defaultFocusHighlightEnabled="false">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:gravity="center_vertical"
+            android:layout_marginTop="@dimen/spacing" android:layout_marginBottom="@dimen/spacing_large">
+            <ImageView android:layout_width="56dp" android:layout_height="56dp"
+                android:background="@drawable/bg_card_alt" android:src="@drawable/ic_launcher_foreground"
+                android:scaleType="centerCrop" android:contentDescription="@string/logo_description" />
+            <TextView style="@style/Overline" android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:layout_marginStart="12dp"
+                android:text="@string/app_name" />
+        </LinearLayout>
+        <TextView style="@style/ScreenTitle" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_marginBottom="@dimen/spacing_half"
+            android:text="@string/register_title" />
+        <TextView style="@style/MutedText" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_marginBottom="@dimen/spacing_large"
+            android:textSize="@dimen/text_body" android:text="@string/register_subtitle" />
+        <TextView style="@style/FieldLabel" android:labelFor="@+id/name" android:text="@string/field_name" />
+        <EditText android:id="@id/name" style="@style/TextInput" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:inputType="textPersonName" android:maxLines="1"
+            android:singleLine="true" android:imeOptions="actionNext" android:saveEnabled="true"
+            android:autofillHints="name" android:maxLength="100" />
+        <TextView android:id="@+id/name_error" style="@style/InlineError" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:visibility="gone" />
+        <Space android:layout_width="1dp" android:layout_height="@dimen/spacing" />
+        <TextView style="@style/FieldLabel" android:labelFor="@+id/phone" android:text="@string/field_phone" />
+        <EditText android:id="@id/phone" style="@style/TextInput" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:inputType="phone" android:maxLines="1"
+            android:singleLine="true" android:imeOptions="actionNext" android:saveEnabled="true"
+            android:autofillHints="phone" android:maxLength="30" />
+        <TextView android:id="@+id/phone_error" style="@style/InlineError" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:visibility="gone" />
+        <Space android:layout_width="1dp" android:layout_height="@dimen/spacing" />
+        <TextView style="@style/FieldLabel" android:labelFor="@+id/email" android:text="@string/field_email" />
+        <EditText android:id="@id/email" style="@style/TextInput" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:inputType="textEmailAddress" android:maxLines="1"
+            android:singleLine="true" android:imeOptions="actionNext" android:saveEnabled="true"
+            android:autofillHints="emailAddress" android:maxLength="254" />
+        <TextView android:id="@+id/email_error" style="@style/InlineError" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:visibility="gone" />
+        <Space android:layout_width="1dp" android:layout_height="@dimen/spacing" />
+        <TextView style="@style/FieldLabel" android:labelFor="@+id/password" android:text="@string/field_password" />
+        <EditText android:id="@id/password" style="@style/TextInput" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:inputType="textPassword" android:maxLines="1"
+            android:singleLine="true" android:imeOptions="actionNext" android:saveEnabled="true"
+            android:autofillHints="newPassword" android:maxLength="128" />
+        <TextView android:id="@+id/password_error" style="@style/InlineError" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:visibility="gone" />
+        <Space android:layout_width="1dp" android:layout_height="@dimen/spacing" />
+        <TextView style="@style/FieldLabel" android:labelFor="@+id/confirm" android:text="@string/field_confirm" />
+        <EditText android:id="@id/confirm" style="@style/TextInput" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:inputType="textPassword" android:maxLines="1"
+            android:singleLine="true" android:imeOptions="actionNext" android:saveEnabled="true"
+            android:autofillHints="newPassword" android:maxLength="128" />
+        <TextView android:id="@+id/confirm_error" style="@style/InlineError" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:visibility="gone" />
+        <Space android:layout_width="1dp" android:layout_height="@dimen/spacing" />
+        <ProgressBar android:id="@+id/auth_progress" style="@style/Loader" android:visibility="gone"
+            android:contentDescription="@string/auth_loading" />
+        <TextView android:id="@+id/auth_error" style="@style/InlineError" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:visibility="gone"
+            android:layout_marginBottom="@dimen/spacing" />
+        <Button android:id="@+id/submit" style="@style/PrimaryButton" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_half"
+            android:text="@string/register_action" />
+        <Button android:id="@+id/login_link" style="@style/TextLink" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_half"
+            android:text="@string/already_account" />
+    </LinearLayout>
+</ScrollView>

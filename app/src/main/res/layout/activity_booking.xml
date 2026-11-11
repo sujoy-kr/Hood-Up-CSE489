@@ -1,0 +1,81 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/main" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:orientation="vertical" android:background="@color/bg">
+    <LinearLayout style="@style/TopBar">
+        <ImageButton android:id="@+id/back" style="@style/IconButton" android:src="@drawable/ic_back"
+            android:contentDescription="@string/back" />
+        <TextView style="@style/BarTitle" android:text="@string/booking_title" />
+        <Button android:id="@+id/refresh" style="@style/SmallButton" android:text="@string/refresh" />
+    </LinearLayout>
+    <ScrollView android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1"
+        android:fillViewport="true" android:scrollbars="none">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="@dimen/spacing"
+            android:focusableInTouchMode="true" android:defaultFocusHighlightEnabled="false">
+            <LinearLayout style="@style/Card" android:orientation="horizontal"
+                android:gravity="center_vertical" android:layout_marginBottom="@dimen/spacing_large">
+                <ImageView style="@style/IconTile" android:src="@drawable/ic_wrench" />
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:orientation="vertical"
+                    android:layout_marginStart="@dimen/spacing">
+                    <TextView android:id="@+id/summary_service" style="@style/SectionHeader" android:layout_width="match_parent" android:layout_height="wrap_content" />
+                    <TextView android:id="@+id/summary_workshop" style="@style/MutedText" android:layout_width="match_parent" android:layout_height="wrap_content" />
+                    <TextView android:id="@+id/summary_price" style="@style/MutedText" android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp" android:textColor="@color/primary"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical"
+                android:layout_marginBottom="@dimen/spacing_half">
+                <TextView style="@style/SectionHeader" android:layout_width="0dp"
+                    android:layout_height="wrap_content" android:layout_weight="1"
+                    android:text="@string/choose_car" />
+                <Button android:id="@+id/add_car" style="@style/TextLink" android:layout_width="wrap_content" android:layout_height="wrap_content" android:minWidth="0dp"
+                    android:textSize="@dimen/text_small" android:text="@string/add_car_short" />
+            </LinearLayout>
+            <Spinner android:id="@+id/car_spinner" android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="52dp"
+                android:layout_marginBottom="@dimen/spacing_large" android:background="@drawable/bg_spinner"
+                android:popupBackground="@drawable/bg_card_alt" android:contentDescription="@string/choose_car" />
+
+            <TextView style="@style/SectionHeader" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="12dp"
+                android:text="@string/choose_date" />
+            <Button android:id="@+id/date" style="@style/SecondaryButton" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_large" android:gravity="start|center_vertical"
+                android:drawableStart="@drawable/ic_calendar" android:drawablePadding="12dp"
+                android:drawableTint="@color/accent" android:textStyle="normal"
+                android:text="@string/choose_date" />
+
+            <TextView style="@style/SectionHeader" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="@dimen/spacing_half"
+                android:text="@string/choose_slot" />
+            <TextView android:id="@+id/availability_status" style="@style/MutedText" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_half" android:text="@string/booking_choose" />
+            <GridLayout android:id="@+id/slot_grid" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginStart="-8dp"
+                android:layout_marginEnd="-8dp" android:layout_marginBottom="@dimen/spacing_large"
+                android:columnCount="2" />
+
+            <TextView style="@style/FieldLabel" android:labelFor="@+id/booking_note"
+                android:text="@string/note_label" />
+            <EditText android:id="@id/booking_note" style="@style/TextInput" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_large"
+                android:inputType="textCapSentences|textMultiLine" android:minLines="2" android:maxLines="5"
+                android:maxLength="1000" android:gravity="top|start" android:importantForAutofill="no" />
+
+            <LinearLayout style="@style/Card">
+                <TextView style="@style/SectionHeader" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="12dp"
+                    android:text="@string/price_title" />
+                <TextView android:id="@+id/service_price_line" style="@style/TextBody" android:layout_width="match_parent" android:layout_height="wrap_content" />
+                <TextView style="@style/Caption" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_half"
+                    android:drawableStart="@drawable/ic_check_small" android:drawablePadding="6dp"
+                    android:drawableTint="@color/accent" android:gravity="center_vertical"
+                    android:textColor="@color/accent" android:text="@string/protected_booking" />
+                <View style="@style/Divider" android:layout_marginTop="12dp"
+                    android:layout_marginBottom="12dp" />
+                <TextView android:id="@+id/total_price_line" style="@style/SectionHeader" android:layout_width="match_parent" android:layout_height="wrap_content" />
+            </LinearLayout>
+            <ProgressBar android:id="@+id/form_progress" style="@style/Loader" android:visibility="gone" />
+            <TextView android:id="@+id/form_error" style="@style/InlineError" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing" android:visibility="gone" />
+            <Button android:id="@+id/confirm_booking" style="@style/PrimaryButton" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="@string/confirm_booking" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

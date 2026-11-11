@@ -1,0 +1,100 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/main" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:orientation="vertical" android:background="@color/bg">
+    <LinearLayout style="@style/TopBar">
+        <ImageButton android:id="@+id/back" style="@style/IconButton" android:src="@drawable/ic_back"
+            android:contentDescription="@string/back" />
+        <TextView style="@style/BarTitle" android:text="@string/booking_detail_title" />
+        <Button android:id="@+id/refresh" style="@style/SmallButton" android:text="@string/refresh" />
+    </LinearLayout>
+    <ScrollView android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1"
+        android:fillViewport="true" android:scrollbars="none">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="@dimen/spacing">
+            <ProgressBar android:id="@+id/form_progress" style="@style/Loader" android:visibility="gone" />
+            <TextView android:id="@+id/form_error" style="@style/InlineError" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing" android:visibility="gone" />
+            <TextView android:id="@+id/detail_state" style="@style/MutedText" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing" android:text="@string/bookings_loading" />
+            <LinearLayout android:id="@+id/booking_content" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical"
+                android:visibility="gone">
+                <LinearLayout style="@style/Card">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="top">
+                    <TextView android:id="@+id/booking_service" style="@style/SectionHeader"
+                        android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" />
+                    <TextView android:id="@+id/booking_status" style="@style/StatusPill" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/spacing_half" />
+                </LinearLayout>
+                <TextView android:id="@+id/booking_workshop" style="@style/MutedText" android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp" />
+                <View style="@style/Divider" android:layout_marginTop="12dp" android:layout_marginBottom="12dp" />
+                <TextView android:id="@+id/booking_time" style="@style/TextBody" android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_small" android:drawableStart="@drawable/ic_clock_small"
+                    android:drawablePadding="@dimen/spacing_half" android:drawableTint="@color/accent"
+                    android:gravity="center_vertical" />
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical"
+                    android:layout_marginTop="@dimen/spacing_half">
+                    <TextView android:id="@+id/booking_car" style="@style/MutedText" android:layout_width="0dp"
+                        android:layout_height="wrap_content" android:layout_weight="1"
+                        android:drawableStart="@drawable/ic_car_small" android:drawablePadding="@dimen/spacing_half"
+                        android:drawableTint="@color/text_muted" android:gravity="center_vertical" />
+                    <TextView android:id="@+id/booking_price" style="@style/TextBody" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/spacing_half" android:textColor="@color/primary"
+                        android:textStyle="bold" />
+                </LinearLayout>
+                <TextView android:id="@+id/waiting_sync" style="@style/Caption" android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_half" android:text="@string/waiting_sync"
+                    android:textColor="@color/warning" android:textStyle="bold" />
+                </LinearLayout>
+                <LinearLayout style="@style/Card">
+                    <TextView android:id="@+id/booking_duration" style="@style/TextBody" android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_small" />
+                    <TextView android:id="@+id/booking_created" style="@style/TextBody" android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_half" android:textSize="@dimen/text_small" />
+                    <TextView android:id="@+id/booking_note" style="@style/TextBody" android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_half" android:textSize="@dimen/text_small" />
+                    <View style="@style/Divider" android:layout_marginTop="12dp"
+                        android:layout_marginBottom="12dp" />
+                    <TextView android:id="@+id/booking_ref" style="@style/Caption" android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:textIsSelectable="true" />
+                </LinearLayout>
+                <TextView style="@style/SectionHeader" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_half"
+                    android:layout_marginBottom="12dp" android:text="@string/booking_timeline" />
+                <LinearLayout android:id="@+id/status_timeline" style="@style/Card" />
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="@dimen/spacing">
+                    <Button android:id="@+id/call_workshop" style="@style/SecondaryButton"
+                        android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:text="@string/call_workshop" />
+                    <Button android:id="@+id/cancel_booking" style="@style/DangerButton"
+                        android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:layout_marginStart="@dimen/spacing"
+                        android:text="@string/booking_cancel" />
+                </LinearLayout>
+                <LinearLayout android:id="@+id/rating_section" style="@style/Card" android:visibility="gone">
+                    <TextView style="@style/SectionHeader" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/booking_rating_title" />
+                    <TextView android:id="@+id/rating_label" style="@style/MutedText" android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp" android:text="@string/booking_rating_select" />
+                    <LinearLayout android:id="@+id/rating_stars" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal"
+                        android:layout_marginTop="@dimen/spacing_half"
+                        android:layout_marginBottom="@dimen/spacing_half">
+                    <Button android:id="@+id/star_1" style="@style/TextLink" android:layout_width="0dp"
+                        android:layout_weight="1" android:layout_height="wrap_content" android:minWidth="0dp"
+                        android:padding="0dp" android:text="@string/rating_empty_star" android:textSize="32sp" />
+                    <Button android:id="@+id/star_2" style="@style/TextLink" android:layout_width="0dp"
+                        android:layout_weight="1" android:layout_height="wrap_content" android:minWidth="0dp"
+                        android:padding="0dp" android:text="@string/rating_empty_star" android:textSize="32sp" />
+                    <Button android:id="@+id/star_3" style="@style/TextLink" android:layout_width="0dp"
+                        android:layout_weight="1" android:layout_height="wrap_content" android:minWidth="0dp"
+                        android:padding="0dp" android:text="@string/rating_empty_star" android:textSize="32sp" />
+                    <Button android:id="@+id/star_4" style="@style/TextLink" android:layout_width="0dp"
+                        android:layout_weight="1" android:layout_height="wrap_content" android:minWidth="0dp"
+                        android:padding="0dp" android:text="@string/rating_empty_star" android:textSize="32sp" />
+                    <Button android:id="@+id/star_5" style="@style/TextLink" android:layout_width="0dp"
+                        android:layout_weight="1" android:layout_height="wrap_content" android:minWidth="0dp"
+                        android:padding="0dp" android:text="@string/rating_empty_star" android:textSize="32sp" />
+                    </LinearLayout>
+                    <Button android:id="@+id/save_rating" style="@style/PrimaryButton" android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:text="@string/booking_rating_save" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

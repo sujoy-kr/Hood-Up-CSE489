@@ -1,0 +1,9 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingTop="@dimen/spacing_half">
+    <Button android:id="@+id/add_car" style="@style/PrimaryButton" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing" android:text="@string/add_car" />
+    <ProgressBar android:id="@+id/form_progress" style="@style/Loader" android:visibility="gone" />
+    <TextView android:id="@+id/form_error" style="@style/InlineError" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing" android:visibility="gone" />
+    <TextView android:id="@+id/cars_status" style="@style/MutedText" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing" android:text="@string/cars_loading" />
+</LinearLayout>

@@ -1,0 +1,24 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/main" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:orientation="vertical" android:gravity="center"
+    android:background="@color/bg" android:padding="@dimen/spacing_large">
+    <ImageView android:layout_width="112dp" android:layout_height="112dp"
+        android:background="@drawable/bg_card_alt" android:src="@drawable/ic_launcher_foreground"
+        android:scaleType="centerCrop" android:contentDescription="@string/logo_description" />
+    <TextView style="@style/ScreenTitle" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_large"
+        android:text="@string/app_name" android:textSize="34sp" android:gravity="center" />
+    <TextView style="@style/MutedText" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_half"
+        android:layout_marginBottom="@dimen/spacing_large" android:textSize="@dimen/text_body"
+        android:text="@string/splash_loading" android:gravity="center" />
+    <ProgressBar android:id="@+id/auth_progress" style="@style/Loader" android:visibility="gone"
+        android:contentDescription="@string/auth_loading" />
+    <TextView android:id="@+id/auth_error" style="@style/InlineError" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:gravity="center" android:visibility="gone"
+        android:layout_marginBottom="@dimen/spacing" />
+    <Button android:id="@+id/retry" style="@style/PrimaryButton" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:text="@string/retry" android:visibility="gone" />
+    <Button android:id="@+id/splash_login" style="@style/TextLink" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_half"
+        android:text="@string/login_action" android:visibility="gone" />
+</LinearLayout>

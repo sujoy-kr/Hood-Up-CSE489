@@ -1,0 +1,28 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/main" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:fillViewport="true" android:background="@color/bg">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="@dimen/spacing_large">
+        <TextView android:layout_width="88dp" android:layout_height="88dp"
+            android:layout_gravity="center_horizontal" android:layout_marginTop="@dimen/spacing_large"
+            android:layout_marginBottom="@dimen/spacing_large" android:background="@drawable/bg_circle_success"
+            android:gravity="center" android:text="@string/checkmark" android:textSize="40sp"
+            android:textColor="@color/success" android:contentDescription="@string/success_symbol_description" />
+        <TextView android:id="@+id/success_title" style="@style/ScreenTitle" android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center"
+            android:layout_marginBottom="@dimen/spacing_half" />
+        <TextView android:id="@+id/success_message" style="@style/MutedText" android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center"
+            android:textSize="@dimen/text_body" android:layout_marginBottom="@dimen/spacing_large" />
+        <LinearLayout style="@style/Card">
+            <TextView style="@style/Overline" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="@dimen/spacing_half"
+                android:text="@string/booking_result_title" />
+            <TextView android:id="@+id/success_details" style="@style/TextBody" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:lineSpacingMultiplier="1.35" />
+            <View style="@style/Divider" android:layout_marginTop="12dp" android:layout_marginBottom="12dp" />
+            <TextView android:id="@+id/success_reference" style="@style/Caption" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:textIsSelectable="true" />
+        </LinearLayout>
+        <Space android:layout_width="1dp" android:layout_height="0dp" android:layout_weight="1" />
+        <Button android:id="@+id/view_bookings" style="@style/PrimaryButton" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing" android:text="@string/view_bookings" />
+        <Button android:id="@+id/back" style="@style/TextLink" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_half" android:text="@string/done" />
+    </LinearLayout>
+</ScrollView>

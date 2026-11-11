@@ -1,0 +1,59 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/main" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:orientation="vertical" android:background="@color/bg">
+    <ScrollView android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1"
+        android:fillViewport="true" android:scrollbars="none">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="@dimen/spacing"
+            android:focusableInTouchMode="true" android:defaultFocusHighlightEnabled="false">
+            <TextView style="@style/ScreenTitle" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="@dimen/spacing_large"
+                android:text="@string/nav_profile" />
+            <TextView android:id="@+id/avatar" style="@style/ScreenTitle" android:layout_width="88dp"
+                android:layout_height="88dp" android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/spacing_large" android:gravity="center"
+                android:background="@drawable/bg_avatar" android:textColor="@color/bg"
+                android:importantForAccessibility="no" />
+            <LinearLayout style="@style/Card">
+                <TextView style="@style/SectionHeader" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="@dimen/spacing"
+                    android:text="@string/profile_contact" />
+                <TextView style="@style/FieldLabel" android:labelFor="@+id/profile_name" android:text="@string/profile_name" />
+                <EditText android:id="@id/profile_name" style="@style/TextInput" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="textPersonName"
+                    android:maxLength="100" android:singleLine="true" android:autofillHints="name"
+                    android:layout_marginBottom="@dimen/spacing" />
+                <TextView style="@style/FieldLabel" android:labelFor="@+id/profile_phone" android:text="@string/profile_phone" />
+                <EditText android:id="@id/profile_phone" style="@style/TextInput" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="phone"
+                    android:maxLength="100" android:singleLine="true" android:autofillHints="phone"
+                    android:layout_marginBottom="@dimen/spacing" />
+                <TextView style="@style/FieldLabel" android:labelFor="@+id/profile_email" android:text="@string/profile_email" />
+                <EditText android:id="@id/profile_email" style="@style/TextInput" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="textEmailAddress"
+                    android:maxLength="100" android:singleLine="true" android:autofillHints="emailAddress"
+                    android:layout_marginBottom="@dimen/spacing" />
+                <TextView style="@style/Caption" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/profile_help" />
+                <TextView android:id="@+id/form_error" style="@style/InlineError" android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:visibility="gone" />
+                <ProgressBar android:id="@+id/form_progress" style="@style/Loader"
+                    android:layout_marginTop="@dimen/spacing" android:layout_marginBottom="0dp"
+                    android:visibility="gone" />
+                <Button android:id="@+id/save_profile" style="@style/PrimaryButton" android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing" android:text="@string/profile_save" />
+            </LinearLayout>
+            <LinearLayout style="@style/Card" android:padding="@dimen/stroke_width">
+                <Button android:id="@+id/manage_cars" style="@style/MenuRow"
+                    android:drawableStart="@drawable/ic_car" android:text="@string/profile_cars" />
+                <View style="@style/Divider" />
+                <Button android:id="@+id/my_bookings" style="@style/MenuRow"
+                    android:drawableStart="@drawable/ic_calendar" android:text="@string/bookings_title" />
+                <View style="@style/Divider" />
+                <Switch android:id="@+id/reminders_toggle" android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="56dp"
+                    android:paddingStart="@dimen/spacing" android:paddingEnd="@dimen/spacing"
+                    android:drawableStart="@drawable/ic_bell" android:drawableTint="@color/text_muted" android:drawablePadding="@dimen/spacing"
+                    android:text="@string/profile_reminders" android:textColor="@color/text"
+                    android:textSize="@dimen/text_body" />
+                <View style="@style/Divider" />
+                <Button android:id="@+id/about" style="@style/MenuRow"
+                    android:drawableStart="@drawable/ic_info" android:text="@string/about_title" />
+            </LinearLayout>
+            <Button android:id="@+id/sign_out" style="@style/DangerButton" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="@string/profile_logout" />
+        </LinearLayout>
+    </ScrollView>
+    <include layout="@layout/nav_bar" />
+</LinearLayout>

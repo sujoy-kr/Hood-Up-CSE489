@@ -1,0 +1,155 @@
+# Hood Up
+
+Hood Up is a dark-mode car workshop booking app for customers and workshop admins. The demo catalog uses Dhaka neighborhoods and BDT prices. Application code is Java, package/application ID is `com.example.carworkshopbookingapp`, minimum Android version is **7.0 / API 24**, and compile/target SDK is **37**.
+
+## Features
+
+- Firebase email/password authentication, role-based entry routing, editable contact profile and owner-scoped cars.
+- Cache-first workshop/service browsing, search, Featured/Open now/Top rated filters, dial/maps actions and service selection.
+- Hourly booking slots, duration-aware overlap checks, transactional reservation locks, cancellation, status timeline and completed-booking ratings.
+- SQLite offline queue and history, bounded foreground sync, live updates while visible and background JobScheduler retries.
+- Booking notifications, inexact appointment reminders, connectivity/status broadcasts and reboot reminder rescheduling.
+- “Ask the Mechanic”: Gemini structured responses with catalog-only service suggestions, local keyword fallback and persisted chat. Only fixed mechanical concepts and temporary service aliases go to Google; full typed text stays out of the AI request.
+- Admin booking management, workshop/service editors, confirmed demo seeding, dashboard totals and a Canvas chart.
+- Implemented demo business model: 10% booking commission, featured placement and Hood Up Plus (৳199/month, no real payment). Plus gives 5% off, the first opening-hour slots, a pickup-request flag and earlier reminders. Pickup is a request flag, not a dispatch service.
+
+All navigation uses Activities and Intents. Screens use basic layouts, ListView, Spinner and XML shape styling; there is no Material, RecyclerView, CardView, Compose or fragment navigation architecture.
+
+## Local setup
+
+1. Open the project in Android Studio with support for the checked-in Android Gradle plugin. Install Android SDK platform 37 and the Build Tools requested by Gradle through SDK Manager. The wrapper pins Gradle 9.6.0; the catalog pins AGP 9.5.1.
+2. Use a **complete JetBrains JDK 25**, including `javac` and `jlink`. `gradle/gradle-daemon-jvm.properties` selects that toolchain; `gradle.properties` leaves configuration caching disabled after the earlier JDK-image failure. Java source/target is 11; that does not mean Gradle should run on a JRE or JDK 11. This workspace uses `/opt/android-studio/jbr`.
+3. Let Android Studio generate ignored `local.properties` with your SDK location. Do not copy another machine's SDK path. For command-line builds set `JAVA_HOME` to the complete JDK if necessary, for example on this workspace:
+
+   ```sh
+   export JAVA_HOME=/opt/android-studio/jbr
+   ./gradlew --version
+   ```
+
+4. Configure Firebase and private environment values below, then build:
+
+   ```sh
+   ./gradlew assembleDebug
+   ```
+
+### Firebase
+
+Use your own Firebase project for anything beyond the existing course demo:
+
+1. Register an Android app with package `com.example.carworkshopbookingapp`. Put its downloaded configuration in `app/google-services.json`; do not replace the package name.
+2. Enable **Authentication → Email/Password**, and create a Cloud Firestore database.
+3. Publish root `firestore.rules` in **Firestore Database → Rules** and deploy/create the indexes in `firestore.indexes.json`. Detailed publication, migration and authorization checks are in [SECURITY_NOTES.md](docs/SECURITY_NOTES.md). A local rule file is not automatically published by building the APK.
+4. Create a customer account in the app. For admin access, the trusted project owner must verify that account's UID/ownership and change its existing `users/{uid}.role` to `admin` in the console. Log out, then use **Admin login**. The APK invite code cannot grant a role; self-registration/promotion is denied by the rules.
+5. As an approved admin, open **Seed demo data** and confirm to add/reset the 6 demo workshops and 10 services. Stable demo IDs preserve other entries and earned rating aggregates. Customer Home no longer has a seed gesture.
+
+Customers read only their own booking/profile/car data; availability uses minimal slot records. A queued cancellation uses a separate immutable marker so it cannot create a CANCELLED booking document or be resurrected by a delayed sync. Catalog service duration is limited to **300 minutes** so the atomic lock proof fits Firestore rule access limits. Prices have at most two decimals.
+
+### Private `.env`
+
+Create `.env` in the **project root**, beside `gradlew`. It needs these variable names; the empty values here are placeholders, not usable credentials:
+
+```dotenv
+GEMINI_API_KEY=
+ADMIN_INVITE_CODE=
+```
+
+Fill the values privately. The Gradle dotenv parser supports quoted values and builds corresponding `BuildConfig` fields; missing values become empty strings. Without a Gemini key, chat uses local suggestions. A configured invite is only a local check that explains owner approval; it never creates an admin account. `.env` and `local.properties` are ignored. Never put actual values in Java, XML, tests, reports, screenshots or version control.
+
+An APK's BuildConfig values are extractable. Restrict the Gemini key/API/package/signing certificate and quotas where supported; APK identity headers are spoofable. Production should use an authenticated Cloud Function proxy with the key in Secret Manager. Backup is disabled. See [security notes](docs/SECURITY_NOTES.md) for limits and exact console steps; no cloud configuration is performed by Gradle.
+
+## Architecture
+
+```text
+               Plain Activities + explicit Intents
+                ui/ and ui/adapter/ (ListView)
+                              |
+                callbacks posted to main Handler
+                              |
+       +----------------------+-----------------------+
+       |                      |                       |
+ data/ stores           ai/ ChatSession          service/ SyncCoordinator
+ BookingStore           GeminiProtocol          BookingSyncService (started)
+ CarStore               FallbackAdvisor         BookingSyncJob
+ BookingSubmission      GeminiClient                  |
+       |                      |                       |
+       +---------- util/ AppExecutors ----------------+
+       |              IO / network pools              |
+       v                      v                       v
+ data/local/            HTTPS Gemini REST        data/remote/
+ LocalDb (SQLite)       (concepts + aliases)      Firestore repositories
+ SessionStore                                      + Firebase Auth
+       ^                                              |
+       +---------- cache, queue and snapshots ---------+
+                              |
+             receiver/ connectivity/status/boot/alarm
+                              |
+             NotificationHelper + ReminderScheduler
+```
+
+SQLite work and Firestore request/mapping work run off the main thread. Gemini's blocking HttpURLConnection uses a separate network executor. Live subscriptions and UI observers are closed/detached with their lifecycle. Rotation stays enabled; form drafts use saved state and chat/queue data use SQLite.
+
+## Course requirements
+
+Paths below are under `app/src/main/java/com/example/carworkshopbookingapp/` unless stated otherwise.
+
+| Requirement | Implementation / file or class |
+| --- | --- |
+| Activities + Intents + basic layouts | `ui/SplashActivity`, `HomeActivity`, `WorkshopDetailActivity`, `BookingActivity`, admin Activities; `app/src/main/res/layout/` |
+| Local storage | `data/local/LocalDb`, `SessionStore`, `ModelJson`: cache, cars, bookings, queue, chat and session |
+| Remote storage | `data/remote/AuthRepository`, `UsersRepository`, `CarsRepository`, `WorkshopsRepository`, `ServicesRepository`, `BookingsRepository`, `AdminRepository` |
+| Threads | `util/AppExecutors`, `data/remote/RemoteTasks`, `ai/GeminiClient`: ExecutorService and main Handler |
+| Started Service | `service/BookingSyncService`, `SyncRunner`; `BookingSyncJob` handles background-safe retries |
+| Custom + system broadcasting | `receiver/ConnectivityMonitor`, `BookingStatusReceiver`, `BootReceiver`, `ReminderReceiver`; `receiver/OfflineBanner` |
+| Notifications | `util/NotificationHelper`, `ReminderScheduler`, `data/ReminderPolicy`; permission flow, channels, immutable deep links and alarms |
+| Business model | `data/BusinessConfig`, `BookingPricing`; `ui/PlusActivity`, `BookingActivity`; featured sorting in `data/WorkshopBrowser` |
+| AI integration | `ai/GeminiClient`, `GeminiProtocol`, `SymptomPrivacy`, `FallbackAdvisor`, `ChatSession`; `ui/ChatbotActivity`, `PickWorkshopActivity` |
+| Admin/reporting | `ui/AdminDashboardActivity`, `BookingsChart`, `AdminBookingsActivity`, `AdminBookingDetailActivity`, `AdminCatalogActivity`; `data/AdminLogic` |
+| Server authorization | Root `firestore.rules`; `security-tests/rules.test.cjs` local emulator tests |
+
+Course Markdown deliverables are available in [PROPOSAL.md](docs/PROPOSAL.md), [REPORT.md](docs/REPORT.md), [SLIDES.md](docs/SLIDES.md), [VIDEO_SCRIPT.md](docs/VIDEO_SCRIPT.md) and [DEMO_SCRIPT.md](docs/DEMO_SCRIPT.md). These include wireframe descriptions, a report, a 13-slide outline, a 55-second storyboard and a live-demo plan. The group still needs to fill member attribution, render/capture the artifacts, record/export the video and package the source project.
+
+## Tests and API 24 compatibility
+
+```sh
+./gradlew test
+./gradlew assembleDebug assembleRelease lint
+./gradlew assembleDebugAndroidTest
+```
+
+JUnit tests in `app/src/test/java/` cover commission/discount rounding and invalid money, every status transition, fallback keyword ranking and matching, Gemini response/envelope parsing and malformed JSON, request privacy/alias mapping, duration-aware slots/locks/closed days, rating aggregates and reminder policy. JSON contract tests use a **test-only** org.json dependency; the Android app uses platform org.json. `test` runs the configured JVM suite (currently `testDebugUnitTest`); the release APK is built separately. HTML reports land under `app/build/reports/tests/`.
+
+For local Firestore authorization tests, `cd security-tests`, run `npm ci` then `npm test` (Node/npm and Java 21+ required). The fixed `demo-hood-up` emulator project does not deploy to production.
+
+`minSdk` stays 24 in both variants. Lint's API checks must remain enabled: channel/foreground APIs, signing certificates, notification permission and animation helpers are guarded with SDK checks; Java collection/default methods used by the app are available at API 24. API 24 also has native vectors, NetworkCallback and the selected alarm APIs. APK signature verification with a minimum SDK of 24 verifies signing compatibility, not application runtime behavior.
+
+An actual Android 7.0/API 24 phone or emulator is still needed to verify installation, rendering, Firebase connectivity and full runtime behavior. Building and lint passing cannot substitute for that device check. Follow the [phone QA table](docs/MANUAL_QA.md) and [release instructions](docs/RELEASE.md).
+
+## APKs and installation
+
+See [RELEASE.md](docs/RELEASE.md) for exact build/signing commands and ownership of signing keys.
+
+| Artifact | Path | Signing / purpose |
+| --- | --- | --- |
+| Debug | `app/build/outputs/apk/debug/app-debug.apk` | Automatically signed with the local Android debug key |
+| Release build | `app/build/outputs/apk/release/app-release-unsigned.apk` | Release variant; not installable until signed |
+| Demo release | `app/build/outputs/apk/release/app-release-demo.apk` | Release variant signed with the local debug certificate; for direct demo installation only |
+| Owner-signed release | Chosen output, e.g. `app/build/outputs/apk/release/app-release.apk` | Signed using the owner's release key via Android Studio or apksigner |
+
+Enable USB debugging, authorize the computer, then:
+
+```sh
+adb devices
+adb install -r app/build/outputs/apk/debug/app-debug.apk
+```
+
+Or transfer a **signed** APK to the phone, open it in Files and temporarily allow that source to install apps. A signing-certificate mismatch prevents in-place updates: use the same key, or uninstall only after preserving needed data (uninstall deletes local data).
+
+## Demo checks and supporting notes
+
+- [Manual QA table](docs/MANUAL_QA.md): customer/admin flows, offline queue, rotation/process recreation, back stack and notifications.
+- [Release and install guide](docs/RELEASE.md): builds, signing, API 24 audit and artifact verification.
+- [Security notes](docs/SECURITY_NOTES.md): rules, admin approval, API restrictions, privacy and remaining external setup.
+- [AI usage: where / why / how](docs/AI_USAGE.md): prompts, structured output, fallback and privacy tradeoffs.
+- [Business model](docs/BUSINESS_MODEL.md): implemented revenue paths and example calculations.
+
+The app is a course/demo implementation. Plus has no payment processing, pickup has no dispatch backend, and background sync/reminders are subject to Android scheduling rather than instant push delivery. Live Firebase/Gemini setup and phone tests must be completed in the intended demo environment.

@@ -1,0 +1,11 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/main" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:orientation="vertical" android:background="@color/bg">
+    <LinearLayout style="@style/TopBar">
+        <ImageButton android:id="@+id/back" style="@style/IconButton" android:src="@drawable/ic_back"
+            android:contentDescription="@string/back" />
+        <TextView style="@style/BarTitle" android:text="@string/pick_workshop_title" />
+        <Button android:id="@+id/refresh" style="@style/SmallButton" android:text="@string/refresh" />
+    </LinearLayout>
+    <ListView android:id="@+id/pick_workshop_list" style="@style/CardList"
+        android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" />
+</LinearLayout>

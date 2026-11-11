@@ -1,0 +1,68 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/main" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:orientation="vertical" android:background="@color/bg">
+    <LinearLayout style="@style/TopBar">
+        <ImageButton android:id="@+id/back" style="@style/IconButton" android:src="@drawable/ic_back"
+            android:contentDescription="@string/back" />
+        <TextView style="@style/BarTitle" android:text="@string/mechanic_title" />
+        <Button android:id="@+id/clear_chat" style="@style/SmallButton" android:text="@string/chat_clear" />
+    </LinearLayout>
+    <ScrollView android:id="@+id/chat_scroll" android:layout_width="match_parent"
+        android:layout_height="0dp" android:layout_weight="1" android:fillViewport="true"
+        android:clipToPadding="false" android:scrollbars="none">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="@dimen/spacing">
+            <LinearLayout style="@style/Card" android:orientation="horizontal">
+                <ImageView style="@style/IconTile" android:src="@drawable/ic_wrench" />
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:orientation="vertical"
+                    android:layout_marginStart="@dimen/spacing">
+                    <TextView style="@style/TextBody" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/mechanic_intro" />
+                    <TextView style="@style/Caption" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_half"
+                        android:text="@string/chat_privacy" />
+                </LinearLayout>
+            </LinearLayout>
+            <TextView style="@style/Overline" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="4dp"
+                android:textColor="@color/text_muted" android:text="@string/chat_quick_title" />
+            <GridLayout android:id="@+id/quick_starts" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginStart="-4dp"
+                android:layout_marginEnd="-4dp" android:layout_marginBottom="@dimen/spacing"
+                android:columnCount="2">
+                    <Button android:id="@+id/quick_brake" style="@style/Chip" android:layout_width="0dp"
+                        android:layout_height="wrap_content" android:layout_columnWeight="1"
+                        android:layout_margin="4dp" android:text="@string/quick_brake" />
+                    <Button android:id="@+id/quick_ac" style="@style/Chip" android:layout_width="0dp"
+                        android:layout_height="wrap_content" android:layout_columnWeight="1"
+                        android:layout_margin="4dp" android:text="@string/quick_ac" />
+                    <Button android:id="@+id/quick_start" style="@style/Chip" android:layout_width="0dp"
+                        android:layout_height="wrap_content" android:layout_columnWeight="1"
+                        android:layout_margin="4dp" android:text="@string/quick_start" />
+                    <Button android:id="@+id/quick_steering" style="@style/Chip" android:layout_width="0dp"
+                        android:layout_height="wrap_content" android:layout_columnWeight="1"
+                        android:layout_margin="4dp" android:text="@string/quick_steering" />
+                    <Button android:id="@+id/quick_warning" style="@style/Chip" android:layout_width="0dp"
+                        android:layout_height="wrap_content" android:layout_columnWeight="1"
+                        android:layout_margin="4dp" android:text="@string/quick_warning" />
+            </GridLayout>
+            <LinearLayout android:id="@+id/chat_messages" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" />
+            <TextView android:id="@+id/chat_typing" style="@style/MutedText" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing" android:text="@string/chat_typing"
+                android:textColor="@color/accent" android:visibility="gone"
+                android:accessibilityLiveRegion="polite" />
+            <TextView android:id="@+id/form_error" style="@style/InlineError" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_half" android:visibility="gone"
+                android:accessibilityLiveRegion="polite" />
+            <Button android:id="@+id/retry_chat" style="@style/SmallButton" android:text="@string/chat_retry"
+                android:visibility="gone" />
+        </LinearLayout>
+    </ScrollView>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="bottom"
+        android:background="@drawable/bg_nav" android:paddingStart="@dimen/spacing"
+        android:paddingEnd="@dimen/spacing" android:paddingTop="12dp" android:paddingBottom="12dp">
+        <EditText android:id="@+id/chat_input" style="@style/TextInput" android:layout_width="0dp"
+            android:layout_weight="1" android:layout_height="wrap_content"
+            android:inputType="textCapSentences|textMultiLine" android:maxLength="2000" android:minLines="1"
+            android:maxLines="3" android:importantForAutofill="no" android:hint="@string/chat_input_hint" />
+        <ImageButton android:id="@+id/send_chat" android:layout_width="52dp" android:layout_height="52dp"
+            android:layout_marginStart="@dimen/spacing_half" android:background="@drawable/btn_primary"
+            android:src="@drawable/ic_send" android:tint="@color/btn_primary_text"
+            android:contentDescription="@string/chat_send" />
+    </LinearLayout>
+</LinearLayout>

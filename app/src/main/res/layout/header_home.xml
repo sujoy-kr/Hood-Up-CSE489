@@ -1,0 +1,65 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingTop="@dimen/spacing">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical"
+        android:layout_marginBottom="@dimen/spacing_large">
+        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_weight="1" android:orientation="vertical">
+            <TextView android:id="@+id/app_title" style="@style/Overline" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/app_name" />
+            <TextView android:id="@+id/greeting" style="@style/ScreenTitle" android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="1"
+                android:ellipsize="end" />
+        </LinearLayout>
+        <ImageButton android:id="@+id/profile_icon" android:layout_width="@dimen/touch_target"
+            android:layout_height="@dimen/touch_target" android:layout_marginStart="@dimen/spacing"
+            android:background="@drawable/bg_icon_circle" android:src="@drawable/ic_profile"
+            android:contentDescription="@string/nav_profile" />
+    </LinearLayout>
+    <LinearLayout android:id="@+id/bot_card" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal"
+        android:gravity="center_vertical" android:background="@drawable/bg_card_hero"
+        android:foreground="@drawable/fg_card_ripple" android:padding="@dimen/spacing"
+        android:layout_marginBottom="@dimen/spacing" android:clickable="true" android:focusable="true">
+        <ImageView android:layout_width="@dimen/icon_tile" android:layout_height="@dimen/icon_tile"
+            android:background="@drawable/bg_circle_dark" android:padding="10dp"
+            android:src="@drawable/ic_chat" android:tint="@color/primary"
+            android:importantForAccessibility="no" />
+        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_weight="1" android:orientation="vertical"
+            android:layout_marginStart="@dimen/spacing">
+            <TextView style="@style/SectionHeader" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/bot_prompt"
+                android:textColor="@color/bg" />
+            <TextView style="@style/MutedText" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/bot_cta"
+                android:textColor="@color/bg" android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+    <EditText android:id="@+id/search" style="@style/TextInput" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp" android:drawableStart="@drawable/ic_search"
+        android:drawablePadding="12dp" android:hint="@string/search_workshops" android:inputType="text"
+        android:singleLine="true" android:imeOptions="actionSearch" android:importantForAutofill="no"
+        android:maxLength="100" />
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="@dimen/spacing_large">
+        <Button android:id="@+id/filter_all" style="@style/Chip" android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/spacing_half" android:minWidth="64dp"
+            android:text="@string/filter_all" />
+        <Button android:id="@+id/filter_open" style="@style/Chip" android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/spacing_half" android:text="@string/filter_open" />
+        <Button android:id="@+id/filter_top" style="@style/Chip" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/filter_top" />
+    </LinearLayout>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical"
+        android:layout_marginBottom="12dp">
+        <TextView style="@style/SectionHeader" android:layout_width="0dp"
+            android:layout_height="wrap_content" android:layout_weight="1"
+            android:text="@string/section_workshops" />
+        <Button android:id="@+id/refresh" style="@style/SmallButton" android:text="@string/refresh" />
+    </LinearLayout>
+    <ProgressBar android:id="@+id/browse_progress" style="@style/Loader" />
+    <TextView android:id="@+id/browse_status" style="@style/MutedText" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing" android:text="@string/browse_loading"
+        android:accessibilityLiveRegion="polite" />
+    <LinearLayout android:id="@+id/skeleton" style="@style/Card"
+        android:importantForAccessibility="noHideDescendants">
+        <View android:layout_width="match_parent" android:layout_height="120dp"
+            android:layout_marginBottom="@dimen/spacing" android:background="@drawable/bg_card_alt" />
+        <View android:layout_width="200dp" android:layout_height="16dp"
+            android:layout_marginBottom="12dp" android:background="@drawable/bg_card_alt" />
+        <View android:layout_width="120dp" android:layout_height="16dp"
+            android:background="@drawable/bg_card_alt" />
+    </LinearLayout>
+</LinearLayout>

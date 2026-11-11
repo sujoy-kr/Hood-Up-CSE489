@@ -1,0 +1,9 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/main" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:orientation="vertical" android:background="@color/bg"
+    android:focusableInTouchMode="true" android:defaultFocusHighlightEnabled="false">
+    <TextView android:id="@+id/offline_banner" style="@style/OfflineBanner"
+        android:text="@string/offline_banner" android:visibility="gone" />
+    <ListView android:id="@+id/workshop_list" style="@style/CardList" android:layout_width="match_parent"
+        android:layout_height="0dp" android:layout_weight="1" />
+    <include layout="@layout/nav_bar" />
+</LinearLayout>

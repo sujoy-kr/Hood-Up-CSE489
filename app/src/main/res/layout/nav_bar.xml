@@ -1,0 +1,9 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:orientation="horizontal" android:background="@drawable/bg_nav">
+    <Button android:id="@+id/nav_home" style="@style/NavItem" android:drawableTop="@drawable/ic_home"
+        android:text="@string/nav_home" />
+    <Button android:id="@+id/nav_bookings" style="@style/NavItem" android:drawableTop="@drawable/ic_calendar"
+        android:text="@string/nav_bookings" />
+    <Button android:id="@+id/nav_profile" style="@style/NavItem" android:drawableTop="@drawable/ic_profile"
+        android:text="@string/nav_profile" />
+</LinearLayout>

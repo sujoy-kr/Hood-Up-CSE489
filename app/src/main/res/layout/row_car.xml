@@ -1,0 +1,21 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingBottom="12dp">
+    <LinearLayout style="@style/Card" android:layout_marginBottom="0dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+            <ImageView style="@style/IconTile" android:src="@drawable/ic_car" />
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:orientation="vertical"
+                android:layout_marginStart="@dimen/spacing">
+                <TextView android:id="@+id/car_title" style="@style/SectionHeader" android:layout_width="match_parent" android:layout_height="wrap_content" />
+                <TextView android:id="@+id/car_plate_value" style="@style/MutedText" android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:letterSpacing="0.06" />
+            </LinearLayout>
+        </LinearLayout>
+        <View style="@style/Divider" android:layout_marginTop="12dp" android:layout_marginBottom="12dp" />
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="end">
+            <Button android:id="@+id/edit_car" style="@style/SmallButton" android:minWidth="88dp"
+                android:text="@string/edit_car" />
+            <Button android:id="@+id/delete_car" style="@style/SmallDangerButton" android:minWidth="88dp"
+                android:layout_marginStart="@dimen/spacing_half" android:text="@string/delete_car" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

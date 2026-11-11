@@ -1,0 +1,38 @@
+Every group will develop the Car Workshop Booking App, 
+however, keep your implementation distant from other groups
+
+What should be in the app:
+1. Activity + Intent + Layouts
+2. Storage (Local + Remote)
+3. Threads
+4. Service
+5. Broadcasting
+6. Notification
+7. Business Model
+8. AI Integration
+** Your app must have the use of the features marked in red
+** You must use basic Layouts that were discussed in class and lab
+** No material latouts or recyler view or any advanced layouts are not allowed
+
+
+Deliverables:
+1. Completely functional app running on a mobile device
+2. A short video on the application (for marketing purpose)
+3. Source code (Project directory in zipped format)
+4. Presentation slides (all members must present)
+5. Report
+    a) Overview/Introduction
+         - Motivation behind the project
+         - Challenged faced on development
+    b) Benefit / Usability
+    c) Implementation Details (Describe what exceptional you've done)
+    d) Business Model (How will you earn from the app)
+    e) Contribution of each member (Mention the responsibility)
+6. Must use AI and description of (where, why, how) AI used
+
+
+Project proposal must have:
+1. Project title
+2. Motivation
+3. Benefit / Usage
+4. Primary Wireframes (Use drawing tools or handsketch)

@@ -1,0 +1,7 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingTop="@dimen/spacing_half">
+    <TextView android:id="@+id/pick_service" style="@style/MutedText" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing" android:textSize="@dimen/text_body" />
+    <ProgressBar android:id="@+id/browse_progress" style="@style/Loader" />
+    <TextView android:id="@+id/browse_status" style="@style/MutedText" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing" />
+</LinearLayout>

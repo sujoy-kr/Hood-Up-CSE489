@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "458672108187",
+    "project_id": "cse489-project-8cf39",
+    "storage_bucket": "cse489-project-8cf39.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:458672108187:android:7e43109012a8dc7dc80c3e",
+        "android_client_info": {
+          "package_name": "com.example.carworkshopbookingapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvj03zzEawfZCCB9IIQYDMY4p3iIvwnGk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

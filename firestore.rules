@@ -1,0 +1,175 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signed() { return request.auth != null; }
+    function owner(uid) { return signed() && request.auth.uid == uid; }
+    function user() { return get(/databases/$(database)/documents/users/$(request.auth.uid)).data; }
+    function admin() { return signed() && user().role == 'admin'; }
+    function customer() { return signed() && user().role == 'customer'; }
+    function text(value, max) { return value is string && value.size() <= max; }
+    function money(value) { return value is number && value >= 0 && value <= 10000000; }
+    function transition(a, b) {
+      return (a == 'PENDING' && b in ['CONFIRMED', 'CANCELLED'])
+        || (a == 'CONFIRMED' && b in ['IN_PROGRESS', 'CANCELLED'])
+        || (a == 'IN_PROGRESS' && b == 'READY') || (a == 'READY' && b == 'COMPLETED');
+    }
+    function profile(data, uid) {
+      return data.keys().hasOnly(['uid','name','phone','email','role','plus','plusUntil'])
+        && data.uid == uid && text(data.name,100) && data.name.size() >= 2
+        && text(data.phone,30) && text(data.email,254)
+        && data.role in ['customer','admin'] && data.get('plus',false) is bool && data.get('plusUntil',0) is int;
+    }
+    match /users/{uid} {
+      allow read: if owner(uid) || admin();
+      // No invite or APK-supplied field can bootstrap an admin. Trusted console/Admin SDK only.
+      allow create: if owner(uid) && profile(request.resource.data,uid)
+        && request.resource.data.role == 'customer'
+        && request.resource.data.get('plus',false) == false && request.resource.data.get('plusUntil',0) == 0;
+      allow update: if owner(uid) && profile(request.resource.data,uid)
+        && request.resource.data.role == resource.data.role
+        && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['plus','plusUntil']);
+      allow delete: if false;
+      match /cars/{id} {
+        allow read, delete: if owner(uid);
+        allow create, update: if owner(uid)
+          && request.resource.data.keys().hasOnly(['id','make','model','year','plate'])
+          && request.resource.data.id == id && text(request.resource.data.make,100)
+          && request.resource.data.make.size() > 0 && text(request.resource.data.model,100)
+          && request.resource.data.model.size() > 0 && text(request.resource.data.plate,30)
+          && request.resource.data.plate.size() >= 3 && request.resource.data.year is int
+          && request.resource.data.year >= 1900 && request.resource.data.year <= 2100;
+      }
+    }
+    match /services/{id} {
+      allow read: if signed();
+      allow create, update: if admin() && request.resource.data.id == id
+        && text(request.resource.data.name,100) && request.resource.data.name.size() >= 2
+        && text(request.resource.data.category,100) && text(request.resource.data.description,1000)
+        && money(request.resource.data.basePrice)
+        && math.abs(request.resource.data.basePrice*100 - math.round(request.resource.data.basePrice*100)) < 0.00001
+        && request.resource.data.durationMin is int
+        && request.resource.data.durationMin > 0 && request.resource.data.durationMin <= 300
+        && request.resource.data.keywords is list && request.resource.data.keywords.size() <= 30;
+      allow delete: if admin();
+    }
+    // Both the booking rating and workshop aggregate must change in the same transaction.
+    function rating(wid,bid) {
+      let before = get(/databases/$(database)/documents/bookings/$(bid)).data;
+      let after = getAfter(/databases/$(database)/documents/bookings/$(bid)).data;
+      let old = get(/databases/$(database)/documents/workshops/$(wid)).data;
+      let next = getAfter(/databases/$(database)/documents/workshops/$(wid)).data;
+      let stars = after.rating;
+      let previous = before.get('rating',0);
+      let count = old.get('ratingCount',0) + (previous == 0 ? 1 : 0);
+      let sum = old.get('ratingSum',old.rating * old.get('ratingCount',0)) + stars - previous;
+      return owner(before.userId) && before.status == 'COMPLETED' && before.workshopId == wid
+        && after.diff(before).affectedKeys().hasOnly(['rating'])
+        && stars is int && stars >= 1 && stars <= 5 && previous >= 0 && previous <= 5
+        && next.diff(old).affectedKeys().hasOnly(['rating','ratingSum','ratingCount','ratingBookingId'])
+        && next.ratingBookingId == bid && next.ratingCount == count && next.ratingSum == sum
+        && count > 0 && next.rating >= 1 && next.rating <= 5
+        && math.abs(next.rating - sum / count) < 0.000001;
+    }
+    match /workshops/{wid} {
+      allow read: if signed();
+      allow create: if admin() && request.resource.data.get('imageKey','day') in ['day','night'];
+      allow delete: if admin();
+      allow update: if (admin() && request.resource.data.get('imageKey','day') in ['day','night']) || (signed() && rating(wid,request.resource.data.ratingBookingId));
+      // Minimal occupancy is shared; customer names/notes/phones are not exposed here.
+      match /slots/{slot} {
+        allow read: if signed();
+        allow create: if customer() && slotCreate(wid,slot,request.resource.data);
+        allow update: if false;
+        allow delete: if signed() && releaseSlot(resource.data.bookingId);
+      }
+    }
+    function slotCreate(wid,slot,data) {
+      let b = getAfter(/databases/$(database)/documents/bookings/$(data.bookingId)).data;
+      return data.keys().hasOnly(['bookingId']) && b.userId == request.auth.uid
+        && b.status == 'PENDING' && b.workshopId == wid
+        && int(slot) >= b.dateTimeMillis && int(slot) < b.dateTimeMillis + b.durationMin*60000
+        && (int(slot) - b.dateTimeMillis) % 3600000 == 0;
+    }
+    function releaseSlot(bid) {
+      let before = get(/databases/$(database)/documents/bookings/$(bid)).data;
+      let after = getAfter(/databases/$(database)/documents/bookings/$(bid)).data;
+      return (owner(before.userId) || admin()) && after.status == 'CANCELLED';
+    }
+    function lock(b,id,index) {
+      return getAfter(/databases/$(database)/documents/workshops/$(b.workshopId)/slots/$(string(b.dateTimeMillis + index*3600000))).data.bookingId == id;
+    }
+    function locks(b,id) {
+      return lock(b,id,0) && (b.durationMin <= 60 || lock(b,id,1))
+        && (b.durationMin <= 120 || lock(b,id,2))
+        && (b.durationMin <= 180 || lock(b,id,3))
+        && (b.durationMin <= 240 || lock(b,id,4));
+    }
+    function unlocked(b,id,index) {
+      let path = /databases/$(database)/documents/workshops/$(b.workshopId)/slots/$(string(b.dateTimeMillis + index*3600000));
+      return !existsAfter(path) || getAfter(path).data.bookingId != id;
+    }
+    function released(b,id) {
+      return unlocked(b,id,0) && (b.durationMin <= 60 || unlocked(b,id,1))
+        && (b.durationMin <= 120 || unlocked(b,id,2))
+        && (b.durationMin <= 180 || unlocked(b,id,3))
+        && (b.durationMin <= 240 || unlocked(b,id,4));
+    }
+    function timing(b,w) {
+      let minute = ((b.dateTimeMillis + 21600000) % 86400000) / 60000;
+      let offset = (minute - w.openHour*60 + 1440) % 1440;
+      let allDay = (w.closeHour - w.openHour + 24) % 24 == 0;
+      let length = allDay ? 1440 : (w.closeHour*60 - w.openHour*60 + 1440) % 1440;
+      let weekday = (int((b.dateTimeMillis - offset*60000 + 21600000) / 86400000) + 4) % 7 + 1;
+      return b.dateTimeMillis is int && b.dateTimeMillis > request.time.toMillis()
+        && b.dateTimeMillis % 3600000 == 0
+        && (offset + b.durationMin <= length
+          || (allDay && !((weekday % 7 + 1) in w.get('closedDays',[]))))
+        && !(weekday in w.get('closedDays',[]));
+    }
+    function validBooking(b,id) {
+      let u = user();
+      let s = get(/databases/$(database)/documents/services/$(b.serviceId)).data;
+      let w = get(/databases/$(database)/documents/workshops/$(b.workshopId)).data;
+      let c = get(/databases/$(database)/documents/users/$(request.auth.uid)/cars/$(b.carId)).data;
+      let price = math.round(s.basePrice*100) / 100.0;
+      return b.keys().hasOnly(['id','userId','userName','workshopId','workshopName','serviceId','serviceName',
+          'carLabel','carId','durationMin','note','dateTimeMillis','createdAt','price','commission','status','synced','rating',
+          'plusApplied','pickupRequested','prioritySlot','basePrice'])
+        && b.id == id && b.userId == request.auth.uid && b.userName == u.name
+        && b.status == 'PENDING' && b.synced == true && b.rating == 0
+        && b.serviceId in w.serviceIds && b.workshopName == w.name && b.serviceName == s.name
+        && b.carLabel == c.make + ' ' + c.model + ' · ' + c.plate
+        && b.durationMin == s.durationMin && b.durationMin > 0 && b.durationMin <= 300
+        && b.basePrice == s.basePrice && b.price == price && money(b.price)
+        && b.get('plusApplied',false) == false && b.get('pickupRequested',false) == false
+        && b.get('prioritySlot',false) == false
+        && b.commission == math.floor((math.round(b.price*100) + 5) / 10) / 100.0
+        && b.pickupRequested is bool && b.createdAt is int && b.createdAt > 0
+        && b.createdAt <= request.time.toMillis()+300000 && text(b.note,1000)
+        && timing(b,w) && locks(b,id)
+        && !exists(/databases/$(database)/documents/booking_cancellations/$(id));
+    }
+    match /bookings/{id} {
+      // Nonexistent reads are needed for idempotent transaction creation; existing data remains private.
+      allow get: if signed() && (!exists(/databases/$(database)/documents/bookings/$(id)) || owner(resource.data.userId) || admin());
+      allow list: if signed() && (owner(resource.data.userId) || admin());
+      allow create: if customer() && validBooking(request.resource.data,id);
+      allow update: if (request.resource.data.status != 'CANCELLED' || released(resource.data,id))
+        && ((admin() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status'])
+          && transition(resource.data.status,request.resource.data.status))
+        || (owner(resource.data.userId) && resource.data.status in ['PENDING','CONFIRMED','CANCELLED']
+          && request.resource.data.status == 'CANCELLED' && request.resource.data.synced == true
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status','synced']))
+        || (owner(resource.data.userId) && rating(resource.data.workshopId,id)));
+      allow delete: if false;
+    }
+    match /booking_cancellations/{id} {
+      allow get: if signed() && (!exists(/databases/$(database)/documents/booking_cancellations/$(id)) || owner(resource.data.userId) || admin());
+      allow list: if signed() && (owner(resource.data.userId) || admin());
+      allow create: if customer() && request.resource.data.keys().hasOnly(['userId'])
+        && owner(request.resource.data.userId) && !exists(/databases/$(database)/documents/bookings/$(id));
+      allow update, delete: if false;
+    }
+    match /{document=**} { allow read, write: if false; }
+  }
+}
