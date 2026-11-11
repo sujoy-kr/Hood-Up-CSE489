@@ -3,6 +3,7 @@
 .env.*
 !.env.example
 /.aws/
+/app/google-services.json
 
 # Local documentation and development helpers
 /docs/
