@@ -43,28 +43,6 @@
         <Button android:id="@+id/submit" style="@style/PrimaryButton" android:layout_width="match_parent"
             android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_half"
             android:text="@string/login_action" />
-        <Button android:id="@+id/expand_admin" style="@style/TextLink" android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_half"
-            android:layout_marginBottom="@dimen/spacing_half" android:text="@string/admin_register_toggle"
-            android:accessibilityLiveRegion="polite" />
-        <LinearLayout android:id="@+id/admin_registration" style="@style/Card" android:visibility="gone">
-            <TextView style="@style/SectionHeader" android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:layout_marginBottom="@dimen/spacing_half"
-                android:text="@string/admin_register_title" />
-            <TextView style="@style/MutedText" android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:layout_marginBottom="@dimen/spacing"
-                android:text="@string/admin_approval_info" />
-            <TextView style="@style/FieldLabel" android:labelFor="@+id/invite" android:text="@string/field_invite" />
-            <EditText android:id="@id/invite" style="@style/TextInput" android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:inputType="textPassword" android:maxLines="1"
-                android:singleLine="true" android:imeOptions="actionDone" android:saveEnabled="true"
-                android:importantForAutofill="no" android:maxLength="100" />
-            <TextView android:id="@+id/invite_error" style="@style/InlineError" android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:visibility="gone" />
-            <Button android:id="@+id/admin_register" style="@style/SecondaryButton" android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing"
-                android:text="@string/admin_register_action" />
-        </LinearLayout>
         <Space android:layout_width="1dp" android:layout_height="0dp" android:layout_weight="1" />
         <Button android:id="@+id/customer_link" style="@style/TextLink" android:layout_width="match_parent"
             android:layout_height="wrap_content" android:text="@string/back_customer"

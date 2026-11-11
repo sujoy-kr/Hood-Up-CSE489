@@ -15,9 +15,7 @@ final class AuthErrors {
         int resource = R.string.error_generic;
         if (error instanceof AuthFailure) {
             switch (((AuthFailure) error).reason) {
-                case ADMIN_APPROVAL_REQUIRED: return "Admin access requires project-owner approval. Create a customer account, then ask the owner to approve its UID in Firebase.";
                 case NOT_ADMIN: resource = R.string.error_not_admin; break;
-                case INVALID_INVITE: resource = R.string.error_invalid_invite; break;
                 case ROLLBACK_FAILED: resource = R.string.error_registration_cleanup; break;
                 default: resource = R.string.error_profile;
             }

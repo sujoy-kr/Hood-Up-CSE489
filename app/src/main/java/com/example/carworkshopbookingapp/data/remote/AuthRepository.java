@@ -1,7 +1,6 @@
 package com.example.carworkshopbookingapp.data.remote;
 
 import android.content.Context;
-import com.example.carworkshopbookingapp.BuildConfig;
 import com.example.carworkshopbookingapp.data.Callback;
 import com.example.carworkshopbookingapp.data.local.SessionStore;
 import com.example.carworkshopbookingapp.data.model.User;
@@ -71,8 +70,7 @@ public final class AuthRepository {
     }
 
     public void register(String name, String phone, String email, String password,
-                         boolean admin, String invite, Callback<User> callback) {
-        if (admin) { checkAdminInvite(invite,callback); return; }
+                         Callback<User> callback) {
         RemoteTasks.run(() -> FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password),
                 result -> result.getUser(), new Callback<FirebaseUser>() {
             @Override public void onSuccess(FirebaseUser current) {
@@ -82,7 +80,7 @@ public final class AuthRepository {
                 user.name = name;
                 user.phone = phone;
                 user.email = email;
-                user.role = admin ? "admin" : "customer";
+                user.role = "customer";
                 users.create(user, new Callback<Void>() {
                     @Override public void onSuccess(Void ignored) { persist(user, callback); }
                     @Override public void onError(Exception error) {
@@ -98,16 +96,6 @@ public final class AuthRepository {
             }
             @Override public void onError(Exception error) { reject(error, callback); }
         });
-    }
-
-    public void checkAdminInvite(String invite,Callback<User> callback) {
-            // The invite ships inside the APK and can be extracted or this check patched.
-            // It is only a UX check, never authority: deployed rules forbid self-created admin roles.
-            boolean valid = !BuildConfig.ADMIN_INVITE_CODE.isEmpty() && java.security.MessageDigest.isEqual(
-                    BuildConfig.ADMIN_INVITE_CODE.getBytes(java.nio.charset.StandardCharsets.UTF_8),
-                    (invite == null ? "" : invite).getBytes(java.nio.charset.StandardCharsets.UTF_8));
-            AppExecutors.main(() -> callback.onError(new AuthFailure(valid ?
-                    AuthFailure.Reason.ADMIN_APPROVAL_REQUIRED : AuthFailure.Reason.INVALID_INVITE)));
     }
 
     private static boolean validRole(User user) {

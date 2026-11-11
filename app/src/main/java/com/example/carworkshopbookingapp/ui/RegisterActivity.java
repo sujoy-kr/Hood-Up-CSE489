@@ -16,7 +16,7 @@ public final class RegisterActivity extends AuthFormActivity {
             valid &= password(R.id.password, R.id.password_error, true);
             valid &= check(R.id.confirm_error, value(R.id.password).equals(value(R.id.confirm)), R.string.error_confirm);
             if (valid) auth.register(value(R.id.name).trim(), phone, value(R.id.email).trim(),
-                    value(R.id.password), false, "", begin());
+                    value(R.id.password), begin());
         });
         findViewById(R.id.login_link).setOnClickListener(view -> EntryNavigation.login(this));
     }

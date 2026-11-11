@@ -10,7 +10,6 @@ import android.widget.TextView;
 import com.example.carworkshopbookingapp.R;
 import com.example.carworkshopbookingapp.data.Callback;
 import com.example.carworkshopbookingapp.data.model.User;
-import com.example.carworkshopbookingapp.data.remote.AuthFailure;
 import com.example.carworkshopbookingapp.data.remote.AuthRepository;
 
 public abstract class AuthFormActivity extends BaseActivity {
@@ -68,14 +67,6 @@ public abstract class AuthFormActivity extends BaseActivity {
         message.setVisibility(state.error == null ? View.GONE : View.VISIBLE);
         if (state.error != null) {
             message.setText(AuthErrors.message(this, state.error));
-            if (state.error instanceof AuthFailure &&
-                    ((AuthFailure) state.error).reason == AuthFailure.Reason.INVALID_INVITE) {
-                TextView inviteError = findViewById(R.id.invite_error);
-                if (inviteError != null) {
-                    inviteError.setText(R.string.error_invalid_invite);
-                    inviteError.setVisibility(View.VISIBLE);
-                }
-            }
         }
         if (state.result != null) {
             User user = state.result;
