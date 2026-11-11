@@ -4,6 +4,11 @@
 !.env.example
 /.aws/
 
+# Local documentation and development helpers
+/docs/
+/tests/
+/AGENTS.md
+
 # Gradle and Android generated output
 .gradle/
 .kotlin/
